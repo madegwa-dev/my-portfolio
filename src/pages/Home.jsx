@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  {useEffect, useState} from "react";
 import styles from "./Home.module.css";
 import { FaEnvelope, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import mimi from "../assets/mimi.jpeg";
@@ -8,6 +8,17 @@ const Home = () => {
     const [position, setPosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 }); // Center initial position
     const [dragging, setDragging] = useState(false); // Track dragging state
     const [offset, setOffset] = useState({ x: 0, y: 0 }); // Track drag offsets
+    const [showCounter, setShowCounter] = useState(true); // Track counter visibility
+
+    useEffect(() => {
+        // Set timeout to hide the counter after 6 seconds
+        const timer = setTimeout(() => {
+            setShowCounter(false);
+        }, 6000);
+
+        // Cleanup timeout if the component unmounts
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleDragStart = (e) => {
         setDragging(true);
@@ -94,18 +105,21 @@ const Home = () => {
                 </div>
             </div>
 
+
             {/* Draggable Visitor Counter */}
-            <div
-                className={styles.dragable}
-                style={{
-                    top: `${position.y}px`,
-                    left: `${position.x}px`,
-                }}
-                onMouseDown={handleDragStart}
-            >
-                <h3>Visitor count</h3>
-                <img src="https://profile-counter.glitch.me/madegwa-o/count.svg" alt="visitor count" />
-            </div>
+            {showCounter && (
+                <div
+                    className={styles.dragable}
+                    style={{
+                        top: `${position.y}px`,
+                        left: `${position.x}px`,
+                    }}
+                    onMouseDown={handleDragStart}
+                >
+                    <h3>Visitor count</h3>
+                    <img src="https://profile-counter.glitch.me/madegwa-o/count.svg" alt="visitor count" />
+                </div>
+            )}
         </div>
     );
 };
